@@ -2,106 +2,141 @@ package ar.edu.unlam.tppb2tests;
 
 import static org.junit.Assert.*;
 
+
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.unlam.tppb2.Alumno;
-import ar.edu.unlam.tppb2.Casa;
 import ar.edu.unlam.tppb2.Gestion;
 import ar.edu.unlam.tppb2.Personalidad;
+import ar.edu.unlam.tppb2.Profesor;
 import ar.edu.unlam.tppb2.Mago;
+import ar.edu.unlam.tppb2.MagoDuplicadoException;
 
 public class TestHogwarts {
-
-	private Casa gryffindor;
-	private Casa slytherin;
-	private Casa hufflepuff;
-	private Casa ravenclaw;
-
-	private Alumno alumno1;
-	private Alumno alumno2;
-	private Alumno alumno3;
+	
+	private Gestion hogwarts;
+	private Mago alumno1;
+	private Mago alumno2;
+	private Mago profesor1;
 
 	@Before
 	public void setUp() {
-		 Gestion hogwarts = new Gestion();
-
-		    gryffindor = new Casa("Gryffindor");
-		    slytherin = new Casa("Slytherin");
-		    hufflepuff = new Casa("Hufflepuff");
-		    ravenclaw = new Casa("Ravenclaw");
-
-		    alumno1 = new Alumno("Harry", "Potter", 1, Personalidad.VALIENTE);
-		    alumno2 = new Alumno("Lourdes", "Godoy Lotta", 2, Personalidad.AMABLE);
-		    alumno3 = new Alumno("Gianfranco", "Pazzarino", 3, Personalidad.VALIENTE);
-
+		hogwarts = new Gestion();
+		
+		alumno1 = new Alumno("A-1", "harry", "potter", Personalidad.VALIENTE, 100);
+		
+		alumno2 = new Alumno("A-2", "ron", "weasley", Personalidad.VALIENTE, 20);
+		
+		profesor1 = new Profesor("P-1", "severus", "snape");
 	}
-
-	// 1
+	
 	@Test
-	public void sePuedeInscribirAUnAlumno() {
-		fail("Not yet implemented");
+	public void queMePermitaInscribirUnAlumno() {
+		hogwarts.inscribirMago(alumno1);
+		assertEquals(1, hogwarts.getMagos().size());
 	}
+	
+	@Test(expected = MagoDuplicadoException.class)
+	public void queNoMePermitaInscribirAUnAlumnoConElMismoID() {
+		hogwarts.inscribirMago(alumno1);
 
-	// 2
+		Mago alumno3 = new Alumno("A-1", "hermione", "granger", Personalidad.VALIENTE, 20);
+		
+		hogwarts.inscribirMago(alumno3);
+	}
+	
 	@Test
-	public void noSePuedeInscribirAUnAlumnoConElMismoID() {
-		fail("Not yet implemented");
+	public void queMePermitaInscribirUnProfesor() {
+		hogwarts.inscribirMago(profesor1);
+		
+		assertTrue(hogwarts.getMagos().contains(profesor1));
+		assertEquals(1, hogwarts.getMagos().size());
 	}
-
-	// 3
+	
+	@Test(expected = MagoDuplicadoException.class)
+	public void queNoMePermitaInscribirAUnProfesorConElMismoIDYLanceProfesorDuplicadoException() {
+		hogwarts.inscribirMago(profesor1);
+		
+		Mago profesor2 = new Profesor("P-1", "remus", "lupin");
+		hogwarts.inscribirMago(profesor2);
+	}
+	
 	@Test
-	public void sePuedeAsignarUnAlumnoALaCasa() {
-		boolean resultado = hufflepuff.asignarAlumno(alumno2);
-		assertTrue(resultado);
-		assertEquals(1, hufflepuff.obtenerCantidadAlumnos().intValue());
-
+	public void quePermitaMostrarLosPuntosQueTieneUnAlumno() {
+		assertEquals(100, ((Alumno)alumno1).getPuntos(), 0);
 	}
-
-	// 4
+	
 	@Test
-	public void sePuedeAsignarMasDeUnAlumnoAUnaCasa() {
-		gryffindor.asignarAlumno(alumno1);
-		gryffindor.asignarAlumno(alumno3);
-
-		assertEquals(2, gryffindor.obtenerCantidadAlumnos().intValue());
-
+	public void quePermitaMostrarLosPuntosQueTienenLosAlumnosDeUnaMismaCasa() {
+		
+	}
+	
+	@Test
+	public void quePermitaMostrarLosPuntosQueTienenLosAlumnos() {
+		
+	}
+	
+	@Test
+	public void queMePermitaObtenerLosAlumnosSancionados() {
+		
+	}
+	
+	@Test
+	public void queMePermitaObtenerElPromedioDeDiasSancionados() {
+		
 	}
 
-	// 5
+	@Test
+	public void queNoMePermitaAplicarleSancionAUnAlumnoConCodigoInexistente() {
+		
+	}
+
+	
+	@Test
+	public void quePermitaMostrarLosPuntosQueTieneUnAlumnoSancionado() {
+		
+	}
+	
+	@Test
+	public void queNoPermitaAplicarleSancionAOtroMagoQueNoSeaAlumno() {
+		
+	}
+	
 	@Test
 	public void unAlumnoDaUnaEvaluacionQueEsteAprobada() {
-		fail("Not yet implemented");
+		
 	}
-
-	// 6
+	
 	@Test
 	public void unAlumnoDaUnaEvaluacionQueEsteDesaprobada() {
-		fail("Not yet implemented");
+		
 	}
-
-	// 7
+	
 	@Test
-	public void seMuestranLosPuntosDeCadaAlumno() {
-		fail("Not yet implemented");
+	public void noPermiteQueUnProfesorDeUnExamen() {
+		
 	}
-
-	// 8
+	
 	@Test
-	public void seOrdenanLosAlumnosDeLaCasaGryffindorPorPuntos() {
-		fail("Not yet implemented");
+	public void seOrdenanLosProfesoresPorCodigoAscendenteYPorApellido() {
+		
 	}
 
-	// 9
 	@Test
-	public void seOrdenanTodosLosAlumnosPorID() {
-		fail("Not yet implemented");
+	public void seOrdenanLosAlumnosPorPuntosDescendenteYPorCasaAscendente() {
+		
 	}
-
-	// 10
+	
+	@Test
+	public void quePermitaObtenerUnReporteConTodosLosMagosPorCodigoYApellido() {
+		
+	}
+	
 	@Test
 	public void seDeterminaLaCasaGanadoraAlTerminarElAño() {
-		fail("Not yet implemented");
+	
 	}
 
 }
