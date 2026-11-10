@@ -67,33 +67,56 @@ public class TestHogwarts {
 	}
 	
 	@Test
-	public void quePermitaMostrarLosPuntosQueTieneUnAlumno() {
-		assertEquals(100, ((Alumno)alumno1).getPuntos(), 0);
-	}
-	
-	@Test
 	public void quePermitaMostrarLosPuntosQueTienenLosAlumnosDeUnaMismaCasa() {
+		hogwarts.inscribirMago(alumno1);
+		hogwarts.inscribirMago(alumno2);
 		
+		Mago alumno3 = new Alumno("A-3", "draco", "malfoy", Personalidad.PROBLEMATICO, 30);
+		
+		hogwarts.inscribirMago(alumno3);
+		
+		assertEquals(120, hogwarts.calcularPuntosDeUnaCasa("Gryffindor"), 0);
 	}
 	
 	@Test
 	public void quePermitaMostrarLosPuntosQueTienenLosAlumnos() {
+		hogwarts.inscribirMago(alumno1);
+		hogwarts.inscribirMago(alumno2);
+
+		Mago alumno3 = new Alumno("A-3", "draco", "malfoy", Personalidad.PROBLEMATICO, 30);
 		
+		hogwarts.inscribirMago(alumno3);
+		
+		assertEquals(150, hogwarts.calcularPuntosDeTodoElColegio(), 0);
 	}
 	
 	@Test
-	public void queMePermitaObtenerLosAlumnosSancionados() {
+	public void queMePermitaObtenerLosAlumnosSancionados() throws MagoNoEncontradoException, SancionInvalidaException, MagoEncontradoPeroEsProfesorException  {
+		hogwarts.inscribirMago(alumno1);
+		hogwarts.inscribirMago(alumno2);
+		hogwarts.aplicarSancion("A-1", 3);
+		List<Alumno> alumnosSancionados = hogwarts.obtenerAlumnosSancionados();
 		
+		assertEquals(1, alumnosSancionados.size());
+		assertEquals("A-1", alumnosSancionados.get(0).getCodigo());
 	}
 	
 	@Test
-	public void queMePermitaObtenerElPromedioDeDiasSancionados() {
+	public void queMePermitaObtenerElPromedioDeDiasSancionados() throws MagoNoEncontradoException, SancionInvalidaException, MagoEncontradoPeroEsProfesorException {
+		hogwarts.inscribirMago(alumno1);
+		hogwarts.inscribirMago(alumno2);
 		
+		hogwarts.aplicarSancion("A-1", 6);
+		hogwarts.aplicarSancion("A-2", 7);
+		
+		assertEquals(6.5, hogwarts.obtenerPromedioDiasSanciones(), 0);
 	}
 
-	@Test
-	public void queNoMePermitaAplicarleSancionAUnAlumnoConCodigoInexistente() {
+	@Test(expected = MagoNoEncontradoException.class)
+	public void queNoMePermitaAplicarleSancionAUnAlumnoConCodigoInexistente() throws MagoNoEncontradoException, SancionInvalidaException, MagoEncontradoPeroEsProfesorException {
+		hogwarts.inscribirMago(alumno1);
 		
+		hogwarts.aplicarSancion("A-3", 3);
 	}
 
 	
