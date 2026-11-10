@@ -2,7 +2,7 @@ package ar.edu.unlam.tppb2tests;
 
 import static org.junit.Assert.*;
 
-
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +11,11 @@ import ar.edu.unlam.tppb2.Alumno;
 import ar.edu.unlam.tppb2.Gestion;
 import ar.edu.unlam.tppb2.Personalidad;
 import ar.edu.unlam.tppb2.Profesor;
+import ar.edu.unlam.tppb2.SancionInvalidaException;
 import ar.edu.unlam.tppb2.Mago;
 import ar.edu.unlam.tppb2.MagoDuplicadoException;
+import ar.edu.unlam.tppb2.MagoEncontradoPeroEsProfesorException;
+import ar.edu.unlam.tppb2.MagoNoEncontradoException;
 
 public class TestHogwarts {
 	
