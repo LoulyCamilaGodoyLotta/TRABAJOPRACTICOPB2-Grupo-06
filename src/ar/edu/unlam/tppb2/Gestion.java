@@ -91,6 +91,19 @@ public class Gestion {
 		return sumaDias/alumnosSancionados ;
 	}
 	
+
+	public void alumnoDaExamen(String codigo, Examen nota) throws MagoEncontradoPeroEsProfesorException {
+		Mago magoBuscado = encontrarMago(codigo);
+		if (magoBuscado instanceof Profesor) {
+			throw new MagoEncontradoPeroEsProfesorException("Se encontró al mago pero al ser profesor no se le puede tomar examen");
+		}
+		if (magoBuscado instanceof Alumno) {
+			if(nota.equals(Examen.APRUEBA)) {
+				((Alumno) magoBuscado).setPuntos(((Alumno)magoBuscado).getPuntos() + 10);
+			}
+		}
+	}
+	
 	public Set<Mago> getMagos() { return magos; }
 	
 }
