@@ -2,106 +2,154 @@ package ar.edu.unlam.tppb2tests;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.unlam.tppb2.Alumno;
-import ar.edu.unlam.tppb2.Casa;
+import ar.edu.unlam.tppb2.Examen;
 import ar.edu.unlam.tppb2.Gestion;
 import ar.edu.unlam.tppb2.Personalidad;
+import ar.edu.unlam.tppb2.Profesor;
+import ar.edu.unlam.tppb2.SancionInvalidaException;
 import ar.edu.unlam.tppb2.Mago;
+import ar.edu.unlam.tppb2.MagoDuplicadoException;
+import ar.edu.unlam.tppb2.MagoEncontradoPeroEsProfesorException;
+import ar.edu.unlam.tppb2.MagoNoEncontradoException;
 
 public class TestHogwarts {
-
-	private Casa gryffindor;
-	private Casa slytherin;
-	private Casa hufflepuff;
-	private Casa ravenclaw;
-
-	private Alumno alumno1;
-	private Alumno alumno2;
-	private Alumno alumno3;
+	
+	private Gestion hogwarts;
+	private Mago alumno1;
+	private Mago alumno2;
+	private Mago profesor1;
 
 	@Before
 	public void setUp() {
-		 Gestion hogwarts = new Gestion();
-
-		    gryffindor = new Casa("Gryffindor");
-		    slytherin = new Casa("Slytherin");
-		    hufflepuff = new Casa("Hufflepuff");
-		    ravenclaw = new Casa("Ravenclaw");
-
-		    alumno1 = new Alumno("Harry", "Potter", 1, Personalidad.VALIENTE);
-		    alumno2 = new Alumno("Lourdes", "Godoy Lotta", 2, Personalidad.AMABLE);
-		    alumno3 = new Alumno("Gianfranco", "Pazzarino", 3, Personalidad.VALIENTE);
-
+		hogwarts = new Gestion();
+		
+		alumno1 = new Alumno("A-1", "harry", "potter", Personalidad.VALIENTE, 100);
+		
+		alumno2 = new Alumno("A-2", "ron", "weasley", Personalidad.VALIENTE, 20);
+		
+		profesor1 = new Profesor("P-1", "severus", "snape");
 	}
-
-	// 1
+	
 	@Test
-	public void sePuedeInscribirAUnAlumno() {
-		fail("Not yet implemented");
+	public void queMePermitaInscribirUnAlumno() {
+		
 	}
-
-	// 2
+	
 	@Test
-	public void noSePuedeInscribirAUnAlumnoConElMismoID() {
-		fail("Not yet implemented");
+	public void queNoMePermitaInscribirAUnAlumnoConElMismoID() {
+		
 	}
-
-	// 3
+	
 	@Test
-	public void sePuedeAsignarUnAlumnoALaCasa() {
-		boolean resultado = hufflepuff.asignarAlumno(alumno2);
-		assertTrue(resultado);
-		assertEquals(1, hufflepuff.obtenerCantidadAlumnos().intValue());
-
+	public void queMePermitaInscribirUnProfesor() {
+	
 	}
-
-	// 4
+	
 	@Test
-	public void sePuedeAsignarMasDeUnAlumnoAUnaCasa() {
-		gryffindor.asignarAlumno(alumno1);
-		gryffindor.asignarAlumno(alumno3);
-
-		assertEquals(2, gryffindor.obtenerCantidadAlumnos().intValue());
-
+	public void queNoMePermitaInscribirAUnProfesorConElMismoIDYLanceProfesorDuplicadoException() {
+		
 	}
-
-	// 5
+	
 	@Test
-	public void unAlumnoDaUnaEvaluacionQueEsteAprobada() {
-		fail("Not yet implemented");
+	public void quePermitaMostrarLosPuntosQueTieneUnAlumno() {
+		
 	}
-
-	// 6
+	
 	@Test
-	public void unAlumnoDaUnaEvaluacionQueEsteDesaprobada() {
-		fail("Not yet implemented");
+	public void quePermitaMostrarLosPuntosQueTienenLosAlumnosDeUnaMismaCasa() {
+		
 	}
-
-	// 7
+	
 	@Test
-	public void seMuestranLosPuntosDeCadaAlumno() {
-		fail("Not yet implemented");
+	public void quePermitaMostrarLosPuntosQueTienenLosAlumnos() {
+		
 	}
-
-	// 8
+	
 	@Test
-	public void seOrdenanLosAlumnosDeLaCasaGryffindorPorPuntos() {
-		fail("Not yet implemented");
+	public void queMePermitaObtenerLosAlumnosSancionados() {
+		
 	}
-
-	// 9
+	
 	@Test
-	public void seOrdenanTodosLosAlumnosPorID() {
-		fail("Not yet implemented");
+	public void queMePermitaObtenerElPromedioDeDiasSancionados() {
+		
 	}
 
-	// 10
+	@Test
+	public void queNoMePermitaAplicarleSancionAUnAlumnoConCodigoInexistente() {
+		
+	}
+	
+	@Test
+	public void quePermitaMostrarLosPuntosQueTieneUnAlumnoSancionado() throws MagoNoEncontradoException, SancionInvalidaException, MagoEncontradoPeroEsProfesorException {
+		hogwarts.inscribirMago(alumno2);
+		hogwarts.aplicarSancion("A-2", 5);
+		
+		assertEquals(10, ((Alumno)alumno2).getPuntos(), 0);
+	}
+	
+	@Test
+	public void queNoPermitaAplicarleSancionAOtroMagoQueNoSeaAlumno() {
+		hogwarts.inscribirMago(profesor1);
+		
+		try {
+			hogwarts.aplicarSancion("P-1", 3);
+			fail("Debió lanzar MagoEncontradoPeroEsProfesorException");
+		}catch(MagoEncontradoPeroEsProfesorException e) {
+			assertEquals("Se encontró al mago pero al ser profesor no se puede aplicarle sanción", e.getMessage());			
+		}catch(MagoNoEncontradoException e) {
+			fail("No debía lanzar esta excepción");
+		}catch(SancionInvalidaException e) {
+			fail("No debía lanzar esta excepción");
+		}
+	}
+	
+	@Test
+	public void unAlumnoDaUnaEvaluacionQueEsteAprobada() throws MagoEncontradoPeroEsProfesorException {
+		hogwarts.inscribirMago(alumno1);
+		hogwarts.alumnoDaExamen("A-1", Examen.APRUEBA);
+		
+		assertEquals(110, ((Alumno)alumno1).getPuntos(), 0);
+	}
+	
+	@Test
+	public void unAlumnoDaUnaEvaluacionQueEsteDesaprobada() throws MagoEncontradoPeroEsProfesorException {
+		hogwarts.inscribirMago(alumno1);
+		hogwarts.alumnoDaExamen("A-1", Examen.DESAPRUEBA);
+		
+		assertEquals(100, ((Alumno)alumno1).getPuntos(), 0);
+	}
+	
+	@Test(expected= MagoEncontradoPeroEsProfesorException.class)
+	public void noPermiteQueUnProfesorDeUnExamen() throws MagoEncontradoPeroEsProfesorException {
+		hogwarts.inscribirMago(profesor1);
+		hogwarts.alumnoDaExamen("P-1", Examen.APRUEBA);
+	}
+	
+	@Test
+	public void seOrdenanLosProfesoresPorCodigoAscendenteYPorApellido() {
+		
+	}
+
+	@Test
+	public void seOrdenanLosAlumnosPorPuntosDescendenteYPorCasaAscendente() {
+		
+	}
+	
+	@Test
+	public void quePermitaObtenerUnReporteConTodosLosMagosPorCodigoYApellido() {
+		
+	}
+	
 	@Test
 	public void seDeterminaLaCasaGanadoraAlTerminarElAño() {
-		fail("Not yet implemented");
+	
 	}
 
 }
