@@ -91,6 +91,7 @@ public class Gestion {
 		return sumaDias/alumnosSancionados ;
 	}
 	
+
 	public void alumnoDaExamen(String codigo, Examen nota) throws MagoEncontradoPeroEsProfesorException {
 		Mago magoBuscado = encontrarMago(codigo);
 		if (magoBuscado instanceof Profesor) {
